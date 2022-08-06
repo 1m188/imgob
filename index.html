@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>imgob</title>
+
+    <style>
+        body,
+        html {
+            height: 100%;
+            width: 100%;
+            margin: 0 0 0 0;
+            overflow: hidden hidden;
+        }
+
+        input {
+            height: 5%;
+        }
+    </style>
+</head>
+
+<body>
+
+    <input type="file" multiple>
+    <canvas></canvas>
+
+</body>
+
+<script>
+    // 图像绘制区域
+    const canvas = document.getElementsByTagName("canvas")[0];
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight * 0.95; // input占了5%的高度
+    const ctx = canvas.getContext("2d"); // 绘制上下文
+
+    // 输入
+    const input = document.getElementsByTagName("input")[0];
+
+    // 输入的所有图像对象及当前显示图像索引
+    let vec = [], idx = -1;
+
+    input.addEventListener("change", () => {
+        if (input.files.length === 0) return;
+
+        vec = new Array(input.files.length), idx = 0;
+
+        for (let i = 0; i < vec.length; i++)
+            vec[i] = new Image();
+        vec[0].onload = () => {
+            ctx.drawImage(vec[0], 0, 0, canvas.width, canvas.height);
+        };
+
+        for (let i = 0; i < input.files.length; i++) { // 读入每张图片
+            let reader = new FileReader();
+            reader.readAsDataURL(input.files[i]);
+            reader.onload = () => {
+                vec[i].src = reader.result;
+            };
+        }
+    });
+
+
+    canvas.onclick = (ev) => {
+        if (ev.x >= canvas.width / 2) idx = (idx + 1) % vec.length;
+        else {
+            idx--;
+            if (idx < 0) idx = vec.length - 1;
+        }
+        ctx.drawImage(vec[idx], 0, 0, canvas.width, canvas.height);
+    };
+</script>
+
+</html>
