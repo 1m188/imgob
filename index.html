@@ -68,8 +68,7 @@
 
     document.getElementById("left_btn").onclick = function () {
         if (vec.length == 0) return;
-        idx--;
-        if (idx < 0) idx = vec.length - 1;
+        if (--idx < 0) idx = vec.length - 1;
         ctx.drawImage(vec[idx], 0, 0, canvas.width, canvas.height);
     };
 
