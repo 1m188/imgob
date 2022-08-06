@@ -16,7 +16,7 @@
             overflow: hidden hidden;
         }
 
-        input {
+        #control {
             height: 5%;
         }
     </style>
@@ -24,7 +24,11 @@
 
 <body>
 
-    <input type="file" multiple>
+    <div id="control">
+        <input type="file" multiple>
+        <button id="left_btn">left</button>
+        <button id="right_btn">right</button>
+    </div>
     <canvas></canvas>
 
 </body>
@@ -62,13 +66,16 @@
         }
     });
 
+    document.getElementById("left_btn").onclick = function () {
+        if (vec.length == 0) return;
+        idx--;
+        if (idx < 0) idx = vec.length - 1;
+        ctx.drawImage(vec[idx], 0, 0, canvas.width, canvas.height);
+    };
 
-    canvas.onclick = (ev) => {
-        if (ev.x >= canvas.width / 2) idx = (idx + 1) % vec.length;
-        else {
-            idx--;
-            if (idx < 0) idx = vec.length - 1;
-        }
+    document.getElementById("right_btn").onclick = function () {
+        if (vec.length == 0) return;
+        idx = (idx + 1) % vec.length;
         ctx.drawImage(vec[idx], 0, 0, canvas.width, canvas.height);
     };
 </script>
