@@ -151,8 +151,9 @@ function handleReorder(newOrder) {
       @cycle-theme="cycleTheme"
     />
 
-    <!-- 图片展示区 -->
+    <!-- 图片展示区（未选择文件夹时隐藏，避免与 FolderSelector 重叠） -->
     <ImageCanvas
+      v-if="count > 0"
       :image="currentImage"
       :is-fullscreen="isFullscreen"
       @prev="prev"
