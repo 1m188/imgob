@@ -3,16 +3,24 @@
 This file provides guidance to agents when working with code in this repository.
 
 ## Project Overview
-- Single-file vanilla HTML/JS app (`index.html`) — a local image viewer using Canvas.
-- No build system, package manager, tests, or linter. Open `index.html` directly in browser.
+- Vue 3 + Vite 工程（Composition API + `<script setup>`），本地图片浏览应用。
+- 无测试框架、无 Pinia（状态由 composable 管理）、无路由器。
 
-## Key Patterns (Non-Obvious)
-- Canvas height is `window.innerHeight * 0.95`, coupled to `#control` being exactly `height: 5%` in CSS. Changing one requires updating the other.
-- Images load via `FileReader.readAsDataURL()` — all images become base64 data URLs in memory, which can be memory-intensive for large/high-res images.
-- Only `vec[0]` gets an `onload` handler for the initial draw. If vec[0] loads before others, subsequent manual navigation may show blank images until those images finish loading asynchronously.
-- `left_btn` and `right_btn` use asymmetric index wrapping: `--idx` with manual wrap vs. `(idx + 1) % vec.length`.
+## Commands
+- `npm run dev` — Vite 开发服务器（`localhost:5173`），需要 localhost 才能使用 File System Access API。
+- `npm run build` — 生产构建至 `dist/`，产物是纯静态文件。
+- `npm run preview` — 预览生产构建（推荐测试，因 `file://` 不支持 FSA API）。
+
+## Architecture (Non-Obvious)
+- 状态流：`useFolderPicker` → `useImages.loadFiles()` → `App.vue` props 向下分发 → 子组件 emit 向上。
+- `useImages` 管理所有排序/导航状态。`useKeyboard` 只负责事件绑定，不持有状态。
+- FolderSelector 包含两种模式：初始模式（未选择）和紧凑模式（已选择），由 `hasSelection` prop 控制。
+- 全屏由 Fullscreen API + `fullscreenchange` 事件驱动，不与 Vue reactivity 系统耦合。
+- 拖拽文件夹使用 `DataTransferItem.webkitGetAsEntry()` 递归读取条目树，不依赖 showDirectoryPicker。
 
 ## Code Style
-- Inline CSS in `<style>` block, inline JS in `<script>` block. No modules, no external files.
-- DOM elements accessed via `getElementsByTagName`/`getElementById` (no querySelector).
-- Hungarian-like naming: `left_btn`, `right_btn` (snake_case for element IDs).
+- Vue SFC：`<script setup>` + `<style scoped>`。无需 Options API。
+- 文件顶部必须包含 JSDoc 块注释说明目的和边缘情况。
+- 组件命名 PascalCase，composable 命名 useXxx，文件命名对应。
+- CSS 变量统一在 `src/assets/main.css` 定义，组件内引用，不硬编码颜色值。
+- 图片加载使用 `URL.createObjectURL()`（blob URL）而非 base64，切换文件夹时必须 revoke。
