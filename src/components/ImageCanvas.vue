@@ -146,13 +146,17 @@ function handleTouchEnd(e) {
       @error="onImageError"
     />
 
-    <!-- 导航提示（半透明区域指示） -->
+    <!-- 导航提示（半透明区域指示，使用 SVG 确保箭头完美居中） -->
     <div v-if="image && loadingState === 'loaded'" class="image-canvas__zones">
       <div class="image-canvas__zone image-canvas__zone--left" title="上一张 (←)">
-        <span class="image-canvas__zone-hint">‹</span>
+        <svg class="image-canvas__zone-hint" width="40" height="40" viewBox="0 0 40 40">
+          <path d="M23 14 L17 20 L23 26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
       </div>
       <div class="image-canvas__zone image-canvas__zone--right" title="下一张 (→)">
-        <span class="image-canvas__zone-hint">›</span>
+        <svg class="image-canvas__zone-hint" width="40" height="40" viewBox="0 0 40 40">
+          <path d="M17 14 L23 20 L17 26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
       </div>
     </div>
   </div>
@@ -266,16 +270,11 @@ function handleTouchEnd(e) {
 }
 
 .image-canvas__zone-hint {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
+  display: block;
   border-radius: 50%;
   background: var(--color-zone-bg);
   color: var(--color-zone-text);
-  font-size: 28px;
-  transition: background-color 0.2s;
+  transition: background-color 0.2s, color 0.2s;
 }
 
 .image-canvas__zone:hover .image-canvas__zone-hint {
