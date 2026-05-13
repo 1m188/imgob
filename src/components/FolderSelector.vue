@@ -147,7 +147,7 @@ function handleDrop(e) {
 }
 
 .folder-selector--drag-over {
-  background-color: rgba(79, 195, 247, 0.1);
+  background-color: var(--color-drag-accent);
   outline: 2px dashed var(--color-accent);
   outline-offset: -4px;
   border-radius: 4px;
@@ -180,7 +180,7 @@ function handleDrop(e) {
   margin-top: 4px;
   padding: 8px 24px;
   background: var(--color-accent);
-  color: #1a1a1a;
+  color: var(--color-accent-text);
   border-radius: 6px;
   font-size: 14px;
   font-weight: 600;
@@ -233,6 +233,6 @@ function handleDrop(e) {
 }
 
 .folder-selector__retry:hover {
-  background: rgba(239, 83, 80, 0.15);
+  background: color-mix(in srgb, var(--color-error) 15%, transparent);
 }
 </style>

@@ -272,14 +272,14 @@ function handleTouchEnd(e) {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.6);
+  background: var(--color-zone-bg);
+  color: var(--color-zone-text);
   font-size: 28px;
   transition: background-color 0.2s;
 }
 
 .image-canvas__zone:hover .image-canvas__zone-hint {
-  background: rgba(255, 255, 255, 0.2);
-  color: rgba(255, 255, 255, 0.9);
+  background: var(--color-zone-bg-hover);
+  color: var(--color-zone-text-hover);
 }
 </style>

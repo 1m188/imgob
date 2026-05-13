@@ -193,12 +193,12 @@ function onThumbError(e) {
 }
 
 .thumbnail-strip__item:hover {
-  border-color: rgba(255, 255, 255, 0.3);
+  border-color: var(--color-thumb-hover);
 }
 
 .thumbnail-strip__item--active {
   border-color: var(--color-thumb-active) !important;
-  box-shadow: 0 0 6px rgba(79, 195, 247, 0.4);
+  box-shadow: 0 0 6px var(--color-thumb-active-shadow);
 }
 
 .thumbnail-strip__item--dragging {

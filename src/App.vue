@@ -3,13 +3,14 @@
 
   职责：
   - 装配所有子组件：FolderSelector、Toolbar、ImageCanvas、ThumbnailStrip
-  - 调用 useFolderPicker / useImages / useKeyboard composable
-  - 管理全局状态：全屏模式、缩略图可见性
+  - 调用 useFolderPicker / useImages / useKeyboard / useTheme composable
+  - 管理全局状态：全屏模式、缩略图可见性、主题模式
   - 协调子组件间的数据流和事件
 
   数据流：
   useFolderPicker → useImages.loadFiles() → 分发到各子组件
-  Toolbar/TileStrip/ImageCanvas → emit 事件 → 调用 useImages 导航方法
+  Toolbar/ThumbnailStrip/ImageCanvas → emit 事件 → 调用 useImages 导航方法
+  useTheme → Toolbar (props + emit cycle-theme)
 
   边缘情况：
   - 文件夹为空 → ImageCanvas 显示占位，ThumbnailStrip 隐藏
@@ -24,6 +25,7 @@ import ThumbnailStrip from './components/ThumbnailStrip.vue'
 import { useFolderPicker } from './composables/useFolderPicker.js'
 import { useImages } from './composables/useImages.js'
 import { useKeyboard } from './composables/useKeyboard.js'
+import { useTheme } from './composables/useTheme.js'
 
 // ---- 状态 ----
 
@@ -54,6 +56,7 @@ const {
   markFailed,
   setCustomOrder,
 } = useImages()
+const { themeMode, themeIcons, themeLabels, cycleTheme } = useTheme()
 
 // ---- 文件夹选取 ----
 
@@ -138,10 +141,14 @@ function handleReorder(newOrder) {
       :sort-asc="sortAsc"
       :is-fullscreen="isFullscreen"
       :show-thumbnails="showThumbnails"
+      :theme-mode="themeMode"
+      :theme-icon="themeIcons[themeMode]"
+      :theme-label="themeLabels[themeMode]"
       @sort-change="setSortMode"
       @toggle-direction="toggleSortDirection"
       @toggle-fullscreen="toggleFullscreen"
       @toggle-thumbnails="showThumbnails = !showThumbnails"
+      @cycle-theme="cycleTheme"
     />
 
     <!-- 图片展示区 -->
@@ -201,7 +208,7 @@ function handleReorder(newOrder) {
   align-items: center;
   gap: var(--padding-md);
   padding: 0 var(--padding-md);
-  background: rgba(0, 0, 0, 0.6);
+  background: var(--color-fs-bar-bg);
   backdrop-filter: blur(8px);
   z-index: 1001;
   opacity: 0;
@@ -230,13 +237,13 @@ function handleReorder(newOrder) {
 .app__fs-exit {
   padding: 4px 12px;
   font-size: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid var(--color-border);
   border-radius: 4px;
   color: var(--color-text);
   transition: background 0.2s;
 }
 
 .app__fs-exit:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--color-btn-bg-hover);
 }
 </style>

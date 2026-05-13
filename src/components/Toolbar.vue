@@ -8,9 +8,10 @@
   - 排序升降序切换按钮
   - 全屏按钮
   - 缩略图条显示/隐藏按钮
+  - 主题切换按钮（黑夜 / 白天 / 跟随系统）
 
   排序逻辑由父组件（App.vue）通过 useImages 提供，
-  本组件仅负责渲染 UI 和 emit 事件。
+  主题状态由 useTheme 提供，本组件仅负责渲染 UI 和 emit 事件。
 -->
 <script setup>
 import { computed } from 'vue'
@@ -31,6 +32,12 @@ const props = defineProps({
   isFullscreen: { type: Boolean, default: false },
   /** 是否显示缩略图条 */
   showThumbnails: { type: Boolean, default: true },
+  /** 当前主题模式 */
+  themeMode: { type: String, default: 'dark' },
+  /** 主题图标 */
+  themeIcon: { type: String, default: '🌙' },
+  /** 主题标签 */
+  themeLabel: { type: String, default: '黑夜模式' },
 })
 
 const emit = defineEmits([
@@ -38,6 +45,7 @@ const emit = defineEmits([
   'toggle-direction',
   'toggle-fullscreen',
   'toggle-thumbnails',
+  'cycle-theme',
 ])
 
 /** 排序模式对应的中文标签 */
@@ -84,6 +92,15 @@ const indexText = computed(() => {
 
     <!-- 右侧：功能按钮 -->
     <div class="toolbar__actions">
+      <!-- 主题切换 -->
+      <button
+        class="toolbar__icon-btn"
+        :title="themeLabel + '（点击切换）'"
+        @click="emit('cycle-theme')"
+      >
+        {{ themeIcon }}
+      </button>
+
       <!-- 缩略图切换 -->
       <button
         class="toolbar__icon-btn"
@@ -155,7 +172,7 @@ const indexText = computed(() => {
 
 .toolbar__sort-btn--active {
   background: var(--color-accent);
-  color: #1a1a1a;
+  color: var(--color-accent-text);
   font-weight: 600;
 }
 
@@ -169,7 +186,7 @@ const indexText = computed(() => {
 
 .toolbar__dir-btn:hover {
   color: var(--color-text);
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--color-btn-bg-hover);
 }
 
 /* === 中间信息 === */
@@ -214,10 +231,12 @@ const indexText = computed(() => {
   border-radius: 6px;
   color: var(--color-text-dim);
   transition: all 0.15s;
+  font-size: 16px;
+  line-height: 1;
 }
 
 .toolbar__icon-btn:hover {
   color: var(--color-text);
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--color-btn-bg-hover);
 }
 </style>
