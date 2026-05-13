@@ -33,8 +33,6 @@ const loadingState = ref('idle') // 'idle' | 'loading' | 'loaded' | 'error'
 /** 触摸起始坐标（用于滑动手势） */
 const touchStartX = ref(0)
 const touchStartY = ref(0)
-/** 图片区域点击的 X 坐标偏移 */
-const clickStartX = ref(0)
 
 // 监听 image 变化，重置加载状态
 watch(
@@ -118,13 +116,13 @@ function handleTouchEnd(e) {
     </div>
 
     <!-- 加载中 -->
-    <div v-else-if="loadingState === 'loading'" class="image-canvas__loading">
+    <div v-else-if="loadingState === 'loading'" class="image-canvas__placeholder">
       <div class="image-canvas__spinner"></div>
       <p class="image-canvas__loading-text">加载中…</p>
     </div>
 
     <!-- 加载失败 -->
-    <div v-else-if="loadingState === 'error'" class="image-canvas__error">
+    <div v-else-if="loadingState === 'error'" class="image-canvas__placeholder">
       <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.5">
         <circle cx="12" cy="12" r="10" />
         <path d="M15 9l-6 6M9 9l6 6" />
@@ -133,7 +131,12 @@ function handleTouchEnd(e) {
       <p class="image-canvas__error-hint">图片加载失败</p>
     </div>
 
-    <!-- 正常显示图片 -->
+    <!--
+      正常显示图片：使用 absolute 定位使 max-width/max-height 正确
+      解析为父容器 .image-canvas 的尺寸，而非图片自身自然尺寸。
+      这在 flex 容器中尤其关键 — flex 子元素的百分比 max-height
+      会在某些浏览器中解析为图片自身高度，导致溢出。
+    -->
     <img
       v-show="loadingState === 'loaded'"
       :src="image?.url"
@@ -159,9 +162,6 @@ function handleTouchEnd(e) {
 .image-canvas {
   position: relative;
   flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   overflow: hidden;
   background: var(--color-bg);
   user-select: none;
@@ -176,22 +176,25 @@ function handleTouchEnd(e) {
   background: #000;
 }
 
-/* === 图片 === */
+/* === 图片：absolute 填满父容器，由 object-fit: contain 负责缩放与居中 === */
 .image-canvas__img {
-  max-width: 100%;
-  max-height: 100%;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
   image-orientation: from-image;
   transition: opacity 0.3s ease;
 }
 
-/* === 占位符 === */
-.image-canvas__placeholder,
-.image-canvas__loading,
-.image-canvas__error {
+/* === 占位符（flex 居中） === */
+.image-canvas__placeholder {
+  position: absolute;
+  inset: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 12px;
   color: var(--color-text-dim);
   font-size: 15px;
