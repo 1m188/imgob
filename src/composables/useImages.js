@@ -18,8 +18,8 @@ import { ref, computed, watch } from 'vue'
 /** @typedef {'name' | 'time' | 'size' | 'custom'} SortMode */
 /** @typedef {{ file: File, url: string, name: string, size: number, lastModified: number }} ImageItem */
 
-/** 支持的排序模式 */
-export const SORT_MODES = ['name', 'time', 'size', 'custom']
+/** 工具栏可见的排序模式（custom 仅由拖拽触发，不显示为按钮） */
+export const SORT_MODES = ['name', 'time', 'size']
 
 /**
  * 使用 localeCompare 进行自然排序（处理数字文件名）
