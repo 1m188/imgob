@@ -42,7 +42,7 @@ function supportsFSA() {
  * 递归读取目录下所有图片文件（仅一级，不递归子目录）
  */
 async function pickViaFSA() {
-  const dirHandle = await window.showDirectoryPicker({ mode: 'readonly' })
+  const dirHandle = await window.showDirectoryPicker({ mode: 'read' })
   const files = []
 
   for await (const entry of dirHandle.values()) {
