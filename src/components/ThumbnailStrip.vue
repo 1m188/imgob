@@ -121,6 +121,7 @@ function onThumbError(e) {
       v-for="(img, index) in images"
       :key="index"
       class="thumbnail-strip__item"
+      title="通过拖动图片来进行自定义排序"
       :class="{
         'thumbnail-strip__item--active': index === currentIndex,
         'thumbnail-strip__item--dragging': index === dragIndex,
