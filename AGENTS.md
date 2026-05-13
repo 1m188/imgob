@@ -17,6 +17,7 @@ This file provides guidance to agents when working with code in this repository.
 - FolderSelector 包含两种模式：初始模式（未选择）和紧凑模式（已选择），由 `hasSelection` prop 控制。
 - 全屏由 Fullscreen API + `fullscreenchange` 事件驱动，不与 Vue reactivity 系统耦合。
 - 拖拽文件夹使用 `DataTransferItem.webkitGetAsEntry()` 递归读取条目树，不依赖 showDirectoryPicker。
+- 主题通过 `useTheme.js` 管理，`html[data-theme="dark"|"light"]` 驱动 CSS 变量切换，持久化到 localStorage。
 
 ## Code Style
 - Vue SFC：`<script setup>` + `<style scoped>`。无需 Options API。
