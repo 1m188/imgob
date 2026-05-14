@@ -24,11 +24,11 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: npm
 
-      # npm ci 在旧版 npm 中有 "Exit handler never called!" 的已知 bug
-      # 改用 npm install 更稳定，配合 --prefer-offline 加速
-      - run: npm install --prefer-offline
+      # npm 10.9.7 有 "Exit handler never called!" bug（lockfile v3 兼容问题）
+      # 先升级 npm 到最新版再安装依赖
+      - run: npm install -g npm@latest
+      - run: npm install
       - run: npm run build
 
       - uses: actions/configure-pages@v4
