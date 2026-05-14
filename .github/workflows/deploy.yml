@@ -22,9 +22,8 @@ jobs:
       - uses: actions/checkout@v4
 
       # ubuntu-24.04 镜像预装 Node.js 22，npm 由 apt 管理，不存在缓存损坏问题
-      # 升级 npm 到最新版后再执行 npm ci
       - run: sudo npm install -g npm@latest
-      - run: npm ci
+      - run: npm install
       - run: npm run build
 
       - uses: actions/configure-pages@v4
