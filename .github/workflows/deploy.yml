@@ -21,13 +21,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-
-      # npm 10.9.7 有 "Exit handler never called!" bug（lockfile v3 兼容问题）
-      # 先升级 npm 到最新版再安装依赖
-      - run: npm install -g npm@latest
+      # 使用系统自带的 Node.js + npm（ubuntu-latest 预装 Node 22）
+      # 避免 actions/setup-node 缓存损坏导致的 MODULE_NOT_FOUND 等问题
       - run: npm install
       - run: npm run build
 
