@@ -2,7 +2,7 @@ name: Deploy static site to GitHub Pages
 
 on:
   push:
-    branches: ["main"]
+    branches: ["master"]
   workflow_dispatch:
 
 permissions:
@@ -25,15 +25,17 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 22.22.2
+          node-version: 22
           cache: npm
 
-      - run: npm ci
+      # npm ci 在旧版 npm 中有 "Exit handler never called!" 的已知 bug
+      # 改用 npm install 更稳定，配合 --prefer-offline 加速
+      - run: npm install --prefer-offline
       - run: npm run build
 
       - uses: actions/configure-pages@v4
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: ./dist          # ← 改成你的产出目录（build/ / out/ 等）
+          path: ./dist
       - id: deployment
         uses: actions/deploy-pages@v4
