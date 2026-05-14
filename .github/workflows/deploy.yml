@@ -14,16 +14,19 @@ concurrency:
 
 jobs:
   deploy:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      # ubuntu-24.04 镜像预装 Node.js 22，npm 由 apt 管理，不存在缓存损坏问题
-      - run: sudo npm install -g npm@latest
-      - run: npm install
+      - uses: actions/setup-node@v6
+        with:
+        node-version: 22
+        cache: 'npm'
+
+      - run: npm ci
       - run: npm run build
 
       - uses: actions/configure-pages@v4
