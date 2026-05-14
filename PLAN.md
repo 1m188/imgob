@@ -16,6 +16,7 @@
 | CSS | Scoped `<style>` + CSS custom properties（双主题） | ✅ |
 | 状态管理 | Vue Composition API（ref / reactive） | ✅ |
 | 图片加载 | `URL.createObjectURL()` | ✅ |
+| 部署 | GitHub Pages（`docs/` 目录发布） | ✅ |
 
 ## 3. 项目结构（当前）
 
@@ -26,10 +27,19 @@ imgob/
 ├── vite.config.js
 ├── .prettierrc
 ├── .gitignore
-├── AGENTS.md
+├── AGENTS.md                      # AI 助手指南
 ├── PLAN.md                        # 本文件
 ├── README.md
 ├── LICENSE
+├── .roo/                          # Roo Code 模式隔离规则
+│   ├── rules-code/AGENTS.md
+│   ├── rules-debug/AGENTS.md
+│   ├── rules-ask/AGENTS.md
+│   └── rules-architect/AGENTS.md
+├── docs/                          # GitHub Pages 发布源
+│   ├── index.html
+│   ├── favicon.svg
+│   └── assets/
 ├── public/
 │   └── favicon.svg
 └── src/
@@ -62,7 +72,7 @@ ImageCanvas      → emit prev / next / toggle-fullscreen / load-error
 ```
 
 - **状态集中在 `useImages`**：`imageList`、`currentIndex`、`sortMode`、`sortAsc`。
-- **主题集中在 `useTheme`**：`themeMode`，持久化到 localStorage。
+- **主题集中在 `useTheme`**：`themeMode`，持久化到 localStorage（键名 `imgob-theme`）。
 - 无跨组件状态共享需求 — 不引入 Pinia。
 
 ## 5. 已实现功能
@@ -81,6 +91,7 @@ ImageCanvas      → emit prev / next / toggle-fullscreen / load-error
 - `<img>` + CSS `position: absolute; inset: 0; object-fit: contain`
 - 加载中/加载失败占位符
 - `image-orientation: from-image` 处理 EXIF 方向
+- 导航箭头：内嵌 SVG（40×40 viewBox，圆圈 `border-radius: 50%`）
 
 ### 5.4 导航
 - 键盘：← → Home End F（全屏） T（缩略图） S（排序切换）
@@ -92,7 +103,7 @@ ImageCanvas      → emit prev / next / toggle-fullscreen / load-error
 ### 5.5 主题
 - 三模式：黑夜（默认）/ 白天 / 跟随系统
 - `html[data-theme="dark"|"light"]` 驱动 CSS 变量
-- 持久化到 localStorage
+- 持久化到 localStorage（键名 `imgob-theme`）
 - system 模式跟随 `prefers-color-scheme` 实时变化
 
 ### 5.6 全屏模式
@@ -103,6 +114,11 @@ ImageCanvas      → emit prev / next / toggle-fullscreen / load-error
 ### 5.7 内存管理
 - `URL.createObjectURL()` 替代 base64
 - `useImages.cleanup()` 在切换文件夹时 revoke 所有旧 URL
+
+### 5.8 部署
+- GitHub Pages 从 `docs/` 目录发布
+- `vite.config.js` 中 `base: '/imgob/'` 仅 `NODE_ENV=production` 时生效
+- 部署流程：`npm run build` → 复制 `dist/` 到 `docs/` → 推送
 
 ## 6. 边缘情况 & 容错（已实现）
 

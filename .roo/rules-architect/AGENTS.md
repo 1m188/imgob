@@ -8,3 +8,4 @@
 - 拖拽排序（`ThumbnailStrip`）通过 splice 重排数组并设置 `sortMode = 'custom'`。custom 不暴露在 Toolbar 排序按钮中（`SORT_MODES` 不含它）。
 - 主题通过 `html[data-theme]` 属性切换，CSS 所有颜色都用 `var(--color-xxx)` 引用。新增 UI 元素时必须同时定义 dark/light 两套 CSS 变量值。
 - Theme 状态持久化在 `localStorage` 键 `imgob-theme`。system 模式通过 `matchMedia('(prefers-color-scheme: light)')` 的 change 事件动态跟随。
+- GitHub Pages 从 `docs/` 发布。`npm run build` → `dist/`，需要额外的复制步骤到 `docs/`（`cp -r dist/* docs/`）。`vite.config.js` 中 `base: '/imgob/'` 仅生产环境生效，本地构建不会注入该前缀。

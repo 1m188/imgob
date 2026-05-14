@@ -27,6 +27,21 @@ npm run build
 npm run preview
 ```
 
+## 部署到 GitHub Pages
+
+```bash
+# 构建（需设置 NODE_ENV=production 以注入正确的 base 路径）
+NODE_ENV=production npm run build
+
+# 将构建产物复制到 docs/ 目录
+cp -r dist/* docs/
+
+# 提交并推送
+git add docs/ && git commit -m "Deploy" && git push
+```
+
+Pages 配置：Repository Settings → Pages → Source: Deploy from a branch → Branch: master, Folder: /docs。
+
 ## 浏览器兼容性
 
 - Chrome/Edge ≥86：完整支持（File System Access API + 拖拽）

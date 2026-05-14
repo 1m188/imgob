@@ -5,6 +5,7 @@
 - 主题 CSS 变量通过 `html[data-theme="dark"|"light"]` 切换。添加新颜色必须同时在 `:root`（dark）和 `html[data-theme='light']` 两处定义，且使用 `var(--color-xxx)` 引用而非硬编码。
 - `SORT_MODES` 导出数组不含 `custom`（仅 `['name', 'time', 'size']`），`custom` 模式仅由拖拽排序触发。Toolbar 通过 `v-for="mode in SORT_MODES"` 渲染按钮，不要把 `custom` 加回去。
 - `showDirectoryPicker({ mode: 'read' })` — 正确的枚举值是 `'read'`，不是 `'readonly'`。
-- ImageCanvas 的导航箭头使用内嵌 SVG（38×38 viewBox），圆圈 40×40 `border-radius: 50%`。不要改用文本字符（字体基线偏移导致不居中）。
+- ImageCanvas 的导航箭头使用内嵌 SVG（40×40 viewBox），圆圈 40×40 `border-radius: 50%`。不要改用文本字符（字体基线偏移导致不居中）。
 - 未选择文件夹时 ImageCanvas 不可见（`v-if="count > 0"`），防止与 FolderSelector 重叠。
 - `eslint.config.js` 不存在 — 项目未配置 ESLint，不要引用。
+- GitHub Pages 发布源是 `docs/`（不是 `dist/`），`npm run build` 产物输出到 `dist/`，需手动或脚本复制到 `docs/`。

@@ -8,7 +8,7 @@ This file provides guidance to agents when working with code in this repository.
 
 ## Commands
 - `npm run dev` — Vite 开发服务器（`localhost:5173`），需要 localhost 才能使用 File System Access API。
-- `npm run build` — 生产构建至 `dist/`，产物是纯静态文件。
+- `npm run build` — 生产构建，产物输出到 `dist/`。
 - `npm run preview` — 预览生产构建（推荐测试，因 `file://` 不支持 FSA API）。
 
 ## Architecture (Non-Obvious)
@@ -25,3 +25,9 @@ This file provides guidance to agents when working with code in this repository.
 - 组件命名 PascalCase，composable 命名 useXxx，文件命名对应。
 - CSS 变量统一在 `src/assets/main.css` 定义，组件内引用，不硬编码颜色值。
 - 图片加载使用 `URL.createObjectURL()`（blob URL）而非 base64，切换文件夹时必须 revoke。
+
+## Deployment (Non-Obvious)
+- GitHub Pages 从 `docs/` 目录发布（Branch: master, Folder: /docs）。
+- `vite.config.js` 中 `base: '/imgob/'` 仅在 `NODE_ENV=production` 时生效。
+- 部署流程：`npm run build` → 将 `dist/` 内容复制到 `docs/` → 推送到 master。
+- `docs/` 目录在 `.gitignore` 之外（不在忽略列表中），必须提交到仓库。
